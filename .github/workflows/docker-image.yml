@@ -14,8 +14,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Log into registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag app:$GITHUB_SHA
+      run: |
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/app:$GITHUB_SHA
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        docker build . --file Dockerfile --tag $IMAGE_ID
+        docker push $IMAGE_ID
       env:
         GITHUB_SHA: ${{ github.sha }}
     
