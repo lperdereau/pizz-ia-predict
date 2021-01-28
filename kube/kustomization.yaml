@@ -1,0 +1,8 @@
+namespace: workshop-2020
+
+commonLabels:
+  app: pizz-ia-predict
+
+resources:
+  - deployment.yml
+  - service.yml
