@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker then deploy
 
 on:
   push:
@@ -18,3 +18,25 @@ jobs:
       run: docker build . --file Dockerfile --tag app:$GITHUB_SHA
       env:
         GITHUB_SHA: ${{ github.sha }}
+    
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Render Deployment YAML
+      uses: nowactions/envsubst@v1
+      with:
+        input: ./deployment.yaml.tmpl
+        output: ./deployment.yaml
+      env:
+        GITHUB_SHA: ${{ github.sha }}
+
+    - name: Trigger deploy
+      uses: Consensys/kubernetes-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      with:
+        args: apply -k kube/
