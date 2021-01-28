@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: pizz-ia-predict
-        image: 
+        image: docker.pkg.github.com/lperdereau/pizz-ia-predict/app:$GITHUB_SHA
         imagePullPolicy: Always
 
         ports:
