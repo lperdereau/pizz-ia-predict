@@ -30,8 +30,8 @@ jobs:
     - name: Render Deployment YAML
       uses: nowactions/envsubst@v1
       with:
-        input: ./deployment.yaml.tmpl
-        output: ./deployment.yaml
+        input: ./kube/deployment.yml.tmpl
+        output: ./kube/deployment.yml
       env:
         GITHUB_SHA: ${{ github.sha }}
 
